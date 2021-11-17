@@ -11,11 +11,8 @@ public class AccountTests extends BaseTest{
 
     @Test
     void getAccountInfoTest(){
-        given()
-                .header("Authorization", token)
-                .get("https://api.imgur.com/3/account/{username}", username)
-                .then()
-                .statusCode(200);
+        given(requestSpecificationWithAuth, positiveResponseSpecification)
+                .get("https://api.imgur.com/3/account/{username}", username);
     }
 
     @Test
