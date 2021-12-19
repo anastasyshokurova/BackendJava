@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 class LoggingInterceptor implements Interceptor {
     Logger logger;
     @Override
-    public okhttp3.Response intercept(Interceptor.Chain chain) throws IOException {
+    public Response intercept(Interceptor.Chain chain) throws IOException {
 
         Request request = chain.request();
         long t1 = System.nanoTime();
@@ -20,7 +20,7 @@ class LoggingInterceptor implements Interceptor {
         Response response = chain.proceed(request);
         long t2 = System.nanoTime();
         logger.info(String.format("Received response for %s in %.1fms%n%s",
-                ((okhttp3.Response) response).request().url(), (t2 - t1) / 1e6d, response.headers()));
+                response.request().url(), (t2 - t1) / 1e6d, response.headers()));
 
         return response;
     }

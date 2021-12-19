@@ -1,13 +1,13 @@
 import com.github.javafaker.Faker;
+import db.dao.ProductsMapper;
 import dto.Product;
 import enums.CategoryType;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import okhttp3.ResponseBody;
+import org.junit.jupiter.api.*;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import service.ProductService;
+import utils.DbUtils;
 import utils.PrettyLogger;
 import utils.RetrofitUtils;
 
@@ -17,6 +17,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 public class ProductUpdateTests {
+    static ProductsMapper productsMapper;
     static Retrofit client;
     static ProductService productService;
     Faker faker = new Faker();
@@ -25,16 +26,19 @@ public class ProductUpdateTests {
 
     @BeforeAll
     static void beforeAll() {
+        productsMapper = DbUtils.getProductsMapper();
         client = RetrofitUtils.getRetrofit();
         productService = client.create(ProductService.class);
     }
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws IOException {
         product = new Product()
                 .withTitle(faker.food().dish())
                 .withPrice((int) ((Math.random() + 1) * 100))
                 .withCategoryTitle(CategoryType.FOOD.getTitle());
+        Response<Product> response = productService.createProduct(product).execute();
+        id = response.body().getId();
     }
 
     @DisplayName("Удаление названия продукта")
@@ -76,5 +80,11 @@ public class ProductUpdateTests {
         assertThat(response.isSuccessful(), equalTo(false));
     }
 
+    @AfterEach
+    void tearDown() throws IOException {
+        Response<ResponseBody> response = productService.deleteProduct(id).execute();
 
+        assertThat(response.code(), equalTo(200));
+        assertThat(response.isSuccessful(), equalTo(true));
+    }
 }

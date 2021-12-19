@@ -9,3 +9,4 @@ public interface CategoryService {
     @GET("categories/{id}")
     Call<Category> getCategory(@Path("id") Integer id);
 }
+

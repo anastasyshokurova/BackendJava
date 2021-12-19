@@ -23,3 +23,4 @@ public interface ProductService {
     @DELETE("products/{id}")
     Call<ResponseBody> deleteProduct(@Path("id") Integer id);
 }
+

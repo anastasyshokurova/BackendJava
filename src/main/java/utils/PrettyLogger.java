@@ -16,12 +16,12 @@ public class PrettyLogger implements HttpLoggingInterceptor.Logger {
             try {
                 Object value = mapper.readValue(message, Object.class);
                 String prettyJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(value);
-                Platform.get().log(prettyJson, Platform.INFO, null);
+                Platform.get().log(Platform.INFO, prettyJson, null);
             } catch (JsonProcessingException e) {
-                Platform.get().log(message, Platform.WARN, e);
+                Platform.get().log(Platform.WARN, message, e);
             }
         } else {
-            Platform.get().log(message, Platform.INFO, null);
+            Platform.get().log(Platform.INFO, message, null);
         }
     }
 }

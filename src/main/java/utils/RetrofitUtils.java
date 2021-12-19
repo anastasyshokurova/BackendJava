@@ -17,7 +17,6 @@ public class RetrofitUtils {
                 .connectTimeout(Duration.ofMinutes(1L))
                 .addInterceptor(logging.setLevel(HttpLoggingInterceptor.Level.BASIC))
                 .build();
-
         return new Retrofit.Builder()
                 .client(client)
                 .baseUrl("http://80.78.248.82:8189/market/api/v1/")
@@ -25,4 +24,3 @@ public class RetrofitUtils {
                 .build();
     }
 }
-
